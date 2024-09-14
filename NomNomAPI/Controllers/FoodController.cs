@@ -22,14 +22,6 @@ namespace NomNomAPI.Controllers
             _foodItemService = foodItemService;
         }
 
-
-        [HttpGet]
-        public async Task<ActionResult<List<FoodItem>>> GetAllFoods()
-        {
-
-            return await _foodItemService.GetAllFoods();
-        }
-
         //metodas gaut visus food item su tais paciais pavadinimais
         [HttpGet("ByName")]
         public async Task<ActionResult<List<FoodItem>>> GetFoodsByName(string name)
@@ -115,6 +107,39 @@ namespace NomNomAPI.Controllers
             }
 
             return Ok(foodItems);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetFoodItems(
+            [FromQuery] int? storeId = null,
+            [FromQuery] string? category = null,
+            [FromQuery] DateTime? expirationDate = null,
+            [FromQuery] double? minPrice = null,
+            [FromQuery] double? maxPrice = null,
+            [FromQuery] double? minDiscount = null,
+            [FromQuery] string? name = null,
+            [FromQuery] bool? isVegan = null,
+            [FromQuery] string? description = null)  // Add this parameter
+        {
+            var foodItems = await _foodItemService.GetFoodItemsAsync(
+                storeId, category, expirationDate, minPrice, maxPrice, minDiscount, name, isVegan, description);
+
+            var result = foodItems.Select(f => new
+            {
+                f.Id,
+                f.StoreId,
+                f.Name,
+                f.Description,
+                f.Category,
+                OriginalPrice = f.Price,
+                DiscountedPrice = f.DiscountedPrice,
+                DiscountPercentage = (f.Price - f.DiscountedPrice) / f.Price * 100,
+                f.ExpirationDate,
+                f.ImageUrl,
+                f.IsVegan
+            });
+
+            return Ok(result);
         }
 
     }
