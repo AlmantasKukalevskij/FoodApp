@@ -43,17 +43,14 @@ namespace NomNomAPI.Services.FoodItemService
                          .ToListAsync();
         }
 
-        public async Task<List<FoodItem>?> DeleteFood(int id)
+        public async Task<FoodItem?> DeleteFood(int id)
         {
-
-            var food = await _context.foodItems.FindAsync(id);
-            if (food == null)
-                return null;//perdaryti geriau?
+            var food = await GetSingleFood(id);
 
             _context.foodItems.Remove(food);
             await _context.SaveChangesAsync();
 
-            return await _context.foodItems.ToListAsync();
+            return food;
         }
 
         public async Task<IEnumerable<FoodItem>> GetAllFoods()
@@ -62,19 +59,19 @@ namespace NomNomAPI.Services.FoodItemService
             return foods;
         }
 
-        public async Task<FoodItem?> GetSingleFood(int id)
+        public async Task<FoodItem> GetSingleFood(int id)
         {
             var food = await _context.foodItems.FindAsync(id);
             if (food == null)
-                return null;
+                throw new Exception("Food item not found");
             return food;
         }
 
-        public async Task<List<FoodItem>?> UpdateFood(int id, FoodItem request)
+
+
+        public async Task<FoodItem> UpdateFood(int id, FoodItem request)
         {
-            var food = await _context.foodItems.FindAsync(id);
-            if (food == null)
-                return null;
+            var food = await GetSingleFood(id);
 
             food.Name = request.Name;
             food.Description = request.Description;
@@ -82,13 +79,10 @@ namespace NomNomAPI.Services.FoodItemService
             food.StoreId = request.StoreId;
             food.ImageUrl = request.ImageUrl;
 
-            //saving changes
             await _context.SaveChangesAsync();
-
-            return await _context.foodItems.ToListAsync();
-
-
+            return food;
         }
+
 
         public async Task<List<FoodItem>> GetAllFoodByStoreId(int storeId)
         {
