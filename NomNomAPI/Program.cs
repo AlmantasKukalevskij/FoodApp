@@ -108,6 +108,8 @@ namespace NomNomAPI
             //        Path.Combine(Directory.GetCurrentDirectory(), @"C:\Users\alman\source\repos\NomNomAPI\NomNomAPI\images")),
             //    RequestPath = "/images"
             //});
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(

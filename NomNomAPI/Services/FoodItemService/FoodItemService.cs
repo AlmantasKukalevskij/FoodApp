@@ -43,42 +43,35 @@ namespace NomNomAPI.Services.FoodItemService
                          .ToListAsync();
         }
 
-        public async Task<List<FoodItem>?> DeleteFood(int id)
+        public async Task<FoodItem?> DeleteFood(int id)
         {
-
-            var food = await _context.foodItems.FindAsync(id);
-            if (food == null)
-                return null;//perdaryti geriau?
+            var food = await GetSingleFood(id);
 
             _context.foodItems.Remove(food);
             await _context.SaveChangesAsync();
 
-            return await _context.foodItems.ToListAsync();
+            return food;
         }
 
         public async Task<IEnumerable<FoodItem>> GetAllFoods()
         {
             var foods = await _context.foodItems.ToListAsync();
-            foreach (var food in foods)
-            {
-                food.ApplyDiscount();
-            }
             return foods;
         }
 
-        public async Task<FoodItem?> GetSingleFood(int id)
+        public async Task<FoodItem> GetSingleFood(int id)
         {
             var food = await _context.foodItems.FindAsync(id);
             if (food == null)
-                return null;
+                throw new Exception("Food item not found");
             return food;
         }
 
-        public async Task<List<FoodItem>?> UpdateFood(int id, FoodItem request)
+
+
+        public async Task<FoodItem> UpdateFood(int id, FoodItem request)
         {
-            var food = await _context.foodItems.FindAsync(id);
-            if (food == null)
-                return null;
+            var food = await GetSingleFood(id);
 
             food.Name = request.Name;
             food.Description = request.Description;
@@ -86,13 +79,10 @@ namespace NomNomAPI.Services.FoodItemService
             food.StoreId = request.StoreId;
             food.ImageUrl = request.ImageUrl;
 
-            //saving changes
             await _context.SaveChangesAsync();
-
-            return await _context.foodItems.ToListAsync();
-
-
+            return food;
         }
+
 
         public async Task<List<FoodItem>> GetAllFoodByStoreId(int storeId)
         {
@@ -116,49 +106,20 @@ namespace NomNomAPI.Services.FoodItemService
             double? minDiscount = null,
             string? name = null,
             bool? isVegan = null,
-            string? description = null)  // Add this parameter
+            string? description = null)
         {
-            var query = _context.foodItems.AsQueryable();
+            var query = new FoodItemQueryBuilder(_context.foodItems.AsQueryable())
+                .WithStoreId(storeId)
+                .WithCategory(category)
+                .WithExpirationDate(expirationDate)
+                .WithMinPrice(minPrice)
+                .WithMaxPrice(maxPrice)
+                .WithName(name)
+                .WithVeganFilter(isVegan)
+                .WithDescription(description)
+                .Build();
 
-            if (storeId.HasValue)
-                query = query.Where(f => f.StoreId == storeId.Value);
-
-            if (!string.IsNullOrEmpty(category))
-                query = query.Where(f => f.Category.ToLower() == category.ToLower());
-
-            if (expirationDate.HasValue)
-                query = query.Where(f => f.ExpirationDate.Date <= expirationDate.Value.Date);
-
-            if (minPrice.HasValue)
-                query = query.Where(f => f.Price >= minPrice.Value);
-
-            if (maxPrice.HasValue)
-                query = query.Where(f => f.Price <= maxPrice.Value);
-
-            if (!string.IsNullOrEmpty(name))
-                query = query.Where(f => f.Name.ToLower().Contains(name.ToLower()));
-
-            if (isVegan.HasValue)
-                query = query.Where(f => f.IsVegan == isVegan.Value);
-
-            if (!string.IsNullOrEmpty(description))
-                query = query.Where(f => f.Description.ToLower().Contains(description.ToLower()));
-
-            var foodItems = await query.ToListAsync();
-
-            // Apply discounts
-            foreach (var item in foodItems)
-            {
-                item.ApplyDiscount();
-            }
-
-            // Filter by minimum discount if specified
-            if (minDiscount.HasValue)
-            {
-                foodItems = foodItems.Where(f => (f.Price - f.DiscountedPrice) / f.Price >= minDiscount.Value).ToList();
-            }
-
-            return foodItems;
+            return await query.ToListAsync();
         }
     }
 }
