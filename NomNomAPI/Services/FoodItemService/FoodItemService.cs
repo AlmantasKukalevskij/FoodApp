@@ -46,8 +46,6 @@ namespace NomNomAPI.Services.FoodItemService
         public async Task<FoodItem?> DeleteFood(int id)
         {
             var food = await GetSingleFood(id);
-            if (food == null)
-                return null;
 
             _context.foodItems.Remove(food);
             await _context.SaveChangesAsync();
@@ -65,17 +63,15 @@ namespace NomNomAPI.Services.FoodItemService
         {
             var food = await _context.foodItems.FindAsync(id);
             if (food == null)
-                throw new KeyNotFoundException("Food item not found");
+                throw new Exception("Food item not found");
             return food;
         }
 
 
 
-        public async Task<FoodItem?> UpdateFood(int id, FoodItem request)
+        public async Task<FoodItem> UpdateFood(int id, FoodItem request)
         {
             var food = await GetSingleFood(id);
-            if (food == null)
-                return null;
 
             food.Name = request.Name;
             food.Description = request.Description;
