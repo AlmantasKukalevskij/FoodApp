@@ -5,6 +5,8 @@ VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NomNomAPI", "NomNomAPI\NomNomAPI.csproj", "{720F1302-3AD2-488A-BB93-4FA2FF0E3B08}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NomNomAPI.Tests", "NomNomAPI.Tests\NomNomAPI.Tests.csproj", "{4E979620-6794-4215-A05F-E9A69D647138}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{720F1302-3AD2-488A-BB93-4FA2FF0E3B08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{720F1302-3AD2-488A-BB93-4FA2FF0E3B08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{720F1302-3AD2-488A-BB93-4FA2FF0E3B08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E979620-6794-4215-A05F-E9A69D647138}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E979620-6794-4215-A05F-E9A69D647138}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E979620-6794-4215-A05F-E9A69D647138}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E979620-6794-4215-A05F-E9A69D647138}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
