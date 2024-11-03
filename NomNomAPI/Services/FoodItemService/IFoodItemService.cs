@@ -22,6 +22,6 @@ namespace NomNomAPI.Services.FoodItemsService
             double? minDiscount = null,
             string? name = null,
             bool? isVegan = null,
-            string? description = null);  // Add this line
+            string? description = null);
     }
 }
