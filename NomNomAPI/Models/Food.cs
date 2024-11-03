@@ -1,7 +1,7 @@
 ﻿namespace NomNomAPI.Models
 {
     public class FoodItem
-    {
+    {//properties
         public int Id { get; set; }
         public int StoreId { get; set; }
         public string Name { get; set; } = string.Empty;
@@ -11,30 +11,30 @@
         public DateTimeOffset ExpirationDate { get; set; }
         public string ImageUrl { get; set; } = "test";
 
-        private double? _discountedPrice;
-
-        public double DiscountedPrice
-        {
-            get
-            {
-                if (_discountedPrice.HasValue)
-                    return _discountedPrice.Value;
-
-
-                var daysUntilExpiration = (ExpirationDate - DateTimeOffset.Now).Days;
-
-                _discountedPrice = daysUntilExpiration switch
-                {
-                    <= 1 => Price * 0.5,
-                    <= 3 => Price * 0.7,
-                    <= 7 => Price * 0.9,
-                    _ => Price
-                };
-
-                return _discountedPrice.Value;
-            }
-        }
+        public double DiscountedPrice { get; set; }
 
         public bool IsVegan { get; set; }
+
+        public void ApplyDiscount()
+        {
+            var daysUntilExpiration = (ExpirationDate - DateTimeOffset.Now).Days;
+
+            if (daysUntilExpiration <= 1)
+            {
+                DiscountedPrice = Price * 0.5; // 50% discount if expiring within a day
+            }
+            else if (daysUntilExpiration <= 3)
+            {
+                DiscountedPrice = Price * 0.7; // 30% discount if expiring within 3 days
+            }
+            else if (daysUntilExpiration <= 7)
+            {
+                DiscountedPrice = Price * 0.9; // 10% discount if expiring within a week
+            }
+            else
+            {
+                DiscountedPrice = Price; // No discount
+            }
+        }
     }
 }

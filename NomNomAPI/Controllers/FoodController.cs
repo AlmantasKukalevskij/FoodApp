@@ -45,7 +45,8 @@ namespace NomNomAPI.Controllers
         public async Task<ActionResult<FoodItem>> GetSingleFood(int id)
         {
             var result = await _foodItemService.GetSingleFood(id);
-            
+            if (result == null)
+                return NotFound("Food not found");
             return Ok(result);
         }
         [HttpPost]
@@ -59,7 +60,8 @@ namespace NomNomAPI.Controllers
         public async Task<ActionResult<List<FoodItem>>> UpdateFood(int id, FoodItem request)
         {
             var result = await _foodItemService.UpdateFood(id, request);
-            
+            if (result == null)
+                return NotFound("Food not found");
             return Ok(result);
         }
 
@@ -67,7 +69,8 @@ namespace NomNomAPI.Controllers
         public async Task<ActionResult<List<FoodItem>>> DeleteFood(int id)
         {
             var result = await _foodItemService.DeleteFood(id);
-            
+            if (result == null)
+                return NotFound("Food not found");
             return Ok(result);
         }
 
