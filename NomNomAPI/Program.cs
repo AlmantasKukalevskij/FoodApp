@@ -1,7 +1,6 @@
 global using NomNomAPI.Models;
 global using NomNomAPI.Data;
 using NomNomAPI.Services.FoodItemService;
-using NomNomAPI.Services.FoodItemsService;
 using Microsoft.EntityFrameworkCore;
 using NomNomAPI.Configurations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NomNomAPI.Models;
-using NomNomAPI.Services.FoodItemsService;
+using NomNomAPI.Services.FoodItemService;
 
 namespace NomNomAPI.Controllers
 {
@@ -45,7 +45,7 @@ namespace NomNomAPI.Controllers
         public async Task<ActionResult<FoodItem>> GetSingleFood(int id)
         {
             var result = await _foodItemService.GetSingleFood(id);
-            
+
             return Ok(result);
         }
         [HttpPost]
@@ -59,7 +59,7 @@ namespace NomNomAPI.Controllers
         public async Task<ActionResult<List<FoodItem>>> UpdateFood(int id, FoodItem request)
         {
             var result = await _foodItemService.UpdateFood(id, request);
-            
+
             return Ok(result);
         }
 
@@ -67,7 +67,7 @@ namespace NomNomAPI.Controllers
         public async Task<ActionResult<List<FoodItem>>> DeleteFood(int id)
         {
             var result = await _foodItemService.DeleteFood(id);
-            
+
             return Ok(result);
         }
 
