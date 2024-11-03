@@ -43,19 +43,6 @@ namespace NomNomAPI.Services.FoodItemService
                          .ToListAsync();
         }
 
-        public async Task<List<FoodItem>?> DeleteFood(int id)
-        {
-
-            var food = await _context.foodItems.FindAsync(id);
-            if (food == null)
-                return null;//perdaryti geriau?
-
-            _context.foodItems.Remove(food);
-            await _context.SaveChangesAsync();
-
-            return await _context.foodItems.ToListAsync();
-        }
-
         public async Task<IEnumerable<FoodItem>> GetAllFoods()
         {
             var foods = await _context.foodItems.ToListAsync();
@@ -64,34 +51,6 @@ namespace NomNomAPI.Services.FoodItemService
                 food.ApplyDiscount();
             }
             return foods;
-        }
-
-        public async Task<FoodItem?> GetSingleFood(int id)
-        {
-            var food = await _context.foodItems.FindAsync(id);
-            if (food == null)
-                return null;
-            return food;
-        }
-
-        public async Task<List<FoodItem>?> UpdateFood(int id, FoodItem request)
-        {
-            var food = await _context.foodItems.FindAsync(id);
-            if (food == null)
-                return null;
-
-            food.Name = request.Name;
-            food.Description = request.Description;
-            food.Price = request.Price;
-            food.StoreId = request.StoreId;
-            food.ImageUrl = request.ImageUrl;
-
-            //saving changes
-            await _context.SaveChangesAsync();
-
-            return await _context.foodItems.ToListAsync();
-
-
         }
 
         public async Task<List<FoodItem>> GetAllFoodByStoreId(int storeId)
